@@ -1,1 +1,122 @@
-<div>Hello</div>
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>TimeStamps_5</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<script src="https://www.w3schools.com/lib/w3.js" defer></script>
+	<script src="https://www.youtube.com/iframe_api" defer></script>
+</head>
+<body class="w3-tiny" onload="launch()" onunload="exportToLocalStorage()">
+
+<header class="w3-padding-small">
+	<div id="player"></div>
+	
+	<span id="horizontalSeparator" draggable='true' ondragstart='dragHor()' class='w3-border-top w3-border-lightgrey'>&nbsp;</span>
+<!-- 	<hr id="horizontalSeparator" draggable='true' ondragstart='dragHor()' />
+ -->	<nav class='w3-row'>
+	<div class="w3-row w3-third">
+		<div class="w3-row w3-half">
+			<input class="w3-quarter w3-round-xxlarge w3-button w3-blue" 
+				onclick="player.seekTo(player.getCurrentTime()-parseInt(interval.value))" type="button" value="&lt;">
+			<input class="w3-half w3-round-xxlarge w3-button w3-green" id="interval" type="number" step=1 min=1 max=60 value=2>
+			<input class="w3-quarter w3-round-xxlarge w3-button w3-blue" 
+				onclick="player.seekTo(player.getCurrentTime()+parseInt(interval.value))" type="button" value="&gt;">
+		</div>
+		<span class="w3-half w3-row">
+			<input class="w3-threequarter w3-round-xxlarge w3-button w3-green" type="text" 
+				id="paused" onclick="addTimeStamp(this.value)" onchange="addTimeStamp(this.value)" value="00:00:00">
+			<input id="follow" class="w3-quarter w3-button w3-round-xxlarge w3-blue" 
+				onclick="(this.value == '&rArr;') ? this.value = '&otimes;': this.value = '&rArr;'" type="button" value=&rArr;>
+		</span>
+	</div>
+	<div class="w3-row w3-third">
+		<input type="button" class="w3-third w3-button w3-round-xxlarge w3-green" value="play"
+			id="play_pause" onclick="
+				if (this.value == 'play') {player.playVideo(); this.value = 'pause'; } 
+				else {player.pauseVideo(); this.value = 'play'; }" disabled>
+		<input type='text' value='newvideourl' class="w3-third w3-center w3-input w3-round-xxlarge w3-blue"
+			onchange="player.destroy(); newPlayer(this.value.split(/[=&]/)[1]); this.value='newvideourl'">
+		<div class="w3-dropdown-hover w3-third">
+			<button class="w3-button w3-round-xxlarge w3-green w3-block">stamps</button>
+			<div class="w3-dropdown-content w3-bar-block w3-center">
+				<a href="#" class="w3-bar-item w3-button w3-round-xxlarge w3-blue">paste saved</a>
+				<a href="#" class="w3-bar-item w3-button w3-round-xxlarge w3-green">generate</a>
+				<a href="#" class="w3-bar-item w3-button w3-round-xxlarge w3-blue" onclick="clearTimeStampsMap()">clear</a>
+				<a href="#" class="w3-bar-item w3-button w3-round-xxlarge w3-green" onclick="copyToClipBoard()">copy result</a>
+			</div>
+		</div>
+	</div>
+	<div class="w3-row w3-third">
+		<button class="w3-third w3-button w3-round-xxlarge w3-blue" onclick="pasteFromClipBoard()">paste subtitles</button>
+		<button class="w3-third w3-button w3-round-xxlarge w3-green" onclick="player.destroy()">settings</button>
+		<input type="button" class="w3-third w3-button w3-round-xxlarge w3-blue" id="proceed" value="how to"
+			onclick="howTo()">
+	</div>
+	</nav>
+</header>
+
+<main id="main" class="w3-padding-small">
+<aside id="aside" class="">
+	<article id="toc" class="w3-small w3-panel w3-text-blue">
+		<p><a href="#toolFunction">Назначение инструмента</a></p>
+		<p><a href="#toolPrinciple">Принцип работы инструмента</a></p>
+		<p><a href="#interfaceDescription">Описание интерфейса</a></p>
+		<p><a href="#toolUsage">Использование инструмента</a></p>
+	</article>
+	<article id="tab">
+	<p class="w3-center">
+		<input type="button" class="w3-button w3-round-xxlarge w3-green" value="«" onclick="navigator.clipboard.writeText(this.value)">
+		<input type="button" class="w3-button w3-round-xxlarge w3-blue" value="»" onclick="navigator.clipboard.writeText(this.value)">
+		<input type="button" class="w3-button w3-round-xxlarge w3-green" value="—" onclick="navigator.clipboard.writeText(this.value)">
+		<br/>
+		<input type="button" class="w3-button w3-round-xxlarge w3-blue" value="ИЯ: " onclick="navigator.clipboard.writeText(this.value)">
+		<input type="button" class="w3-button w3-round-xxlarge w3-green" value="ИП: " onclick="navigator.clipboard.writeText(this.value)">
+		<input type="button" class="w3-button w3-round-xxlarge w3-blue" value="АК: " onclick="navigator.clipboard.writeText(this.value)">
+	</p>
+	</article>
+</aside>
+
+<div draggable='true' ondragstart='dragVert()' id='verticalSeparator' class="w3-border-left w3-border-lightgrey">&nbsp;</div>
+
+<section id="section" class="w3-panel">
+	<article id="descr" w3-include-html="descr.html">
+	
+	</article>
+	<article id="subtitles"></article>
+</section>
+
+</main>
+<!-- <footer class="w3-bottom w3-padding-small w3-row w3-center">
+	<div class="w3-row w3-third">
+		<span class="w3-quarter w3-round-xxlarge w3-padding">ratio, %: </span>
+		<input class="w3-quarter w3-round-xxlarge w3-button w3-green" type="number" id="wdth" 
+			onchange="stampsTable.style.width=this.value+'%'; script.style.width=100-this.value+'%'" 
+			step=5 max=95 min=10 value=40>
+		<span class="w3-quarter w3-round-xxlarge w3-padding">rate, x: </span>
+		<input class="w3-quarter w3-round-xxlarge w3-button w3-blue" type="number" id="rate" 
+			onchange="audioTrack.playbackRate=this.value" min=0.25 step=0.25 value=1.25>
+	</div>
+	<div class="w3-row w3-twothird">
+		<div class="w3-row w3-threequarter">
+			<input class="w3-third w3-round-xxlarge w3-button w3-green" type="button" 
+				id="clear" onclick="clearTimeStampsMap()" value="clear table">
+			<input class="w3-third w3-round-xxlarge w3-button w3-blue" type="button" 
+				id="paste" onclick="pasteFromClipBoard()" value="paste transcript">
+			<input class="w3-third w3-round-xxlarge w3-button w3-green" type="button" 
+				id="copy" onclick="copyToClipBoard()" value="copy result">
+		</div>
+					<input class="w3-quarter w3-round-xxlarge w3-button w3-blue" type="button" 
+				id="clear" onclick="" value="how to">
+	</div>
+	<script>w3.includeHTML();</script>
+
+</footer> -->
+
+
+<script src="script.js"></script>
+</body>
+</html>

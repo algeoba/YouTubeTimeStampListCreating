@@ -1,0 +1,12 @@
+[contenteditable],input[type=text] {outline: 0px solid transparent;}
+.w3-badge {cursor: pointer;}
+a {cursor: pointer; }
+#main {display: inline-flex;  }
+#aside {float: left; overflow: auto; margin-right: 6px;}
+#section {overflow: auto; margin-left: 6px;}
+#verticalSeparator {cursor: e-resize;float: left;}
+#horizontalSeparator {display: block; cursor: n-resize; font-size: 1px}
+
+/*html, body {height: 100%; width: 100%;}width: 1; 
+padding-left: 3; padding-right: 3; background-color: gainsboro; background-color: gainsboro; 
+*/
