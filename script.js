@@ -1,4 +1,5 @@
-
+// This is to test github connection
+let toBe = 'orNotToBe';
 let hrs, hrs_raw, min, sec, result, output, bonk, temp, interim, arr, timeStampsMapSortedArray, newTranscript, styledScript;
 let timeStampsMap = new Map(JSON.parse(localStorage.getItem('AGB_timeStamps')));
 let H, W = document.documentElement.clientWidth - 16;
